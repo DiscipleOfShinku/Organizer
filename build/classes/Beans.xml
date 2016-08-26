@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd ">
+
+   <!-- Initialization for data source -->
+   <bean id="dataSource" 
+      class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+      <property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
+      <property name="url" value="jdbc:sqlserver://127.0.0.1:1433;databaseName=SQLWooh"/>
+      <property name="username" value="sa"/>
+      <property name="password" value="qwerty123"/>
+   </bean>
+
+   <!-- Definition for NoteClass bean -->
+   <bean id="NoteClass" 
+      class="organizerpack.NoteClass">
+      <property name="dataSource"  ref="dataSource" />    
+   </bean>
+      
+</beans>
