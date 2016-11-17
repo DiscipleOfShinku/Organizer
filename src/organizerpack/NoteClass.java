@@ -2,6 +2,7 @@ package organizerpack;
 
 import javax.sql.DataSource;
 import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.UncategorizedSQLException;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 public class NoteClass {
@@ -24,11 +25,22 @@ public class NoteClass {
 	public void createEntry(){
 
 	    try {
-	       String SQL = "insert into OrganizerNotes (UserId, note) values (1, ?)";
-	       jdbcTemplateObject.update( SQL, note);
-
-	    } catch (DataAccessException e) {
-	       throw e;
+	    	jdbcTemplateObject.execute("create schema SQLWooh create table SQLWooh.OrganizerNotes (Id int IDENTITY(1,1) PRIMARY KEY, UserId int NOT NULL, Note varchar(1000), NoteDate smalldatetime)");
+		       String SQL = "insert into SQLWooh.OrganizerNotes (UserId, note) values (1, ?)";
+		       jdbcTemplateObject.update( SQL, note);    	
 	    }
+	    catch (UncategorizedSQLException ue) {
+	    	try {
+		       String SQL = "insert into SQLWooh.OrganizerNotes (UserId, note) values (1, ?)";
+		       jdbcTemplateObject.update( SQL, note);
+	    	}
+			catch (DataAccessException e) {
+				   throw e;
+			}
+		}
+		catch (DataAccessException e) {
+			   throw e;
+		}
+
 	 }
 }

@@ -1,0 +1,5 @@
+CREATE DATABASE SQLWooh;
+
+USE SQLWooh;
+
+EXEC sp_changedbowner 'sa';

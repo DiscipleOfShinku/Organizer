@@ -1,11 +1,16 @@
+<%@ page contentType="text/html; charset=UTF-8" %>
+
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
+<%@ taglib prefix="x" uri="http://java.sun.com/jstl/xml" %>
+
 <html>
 <head>
-<title>Welcome to organizer</title>
+<title><c:out value="Welcome to organizer."/></title>
 </head>
 <body>
 
-<h2>Your note:</h2>
+<h2><c:out value="Your note:"/></h2>
 <form:form method="POST" action="/Organizer/addNote">
    <table>
     <tr>
