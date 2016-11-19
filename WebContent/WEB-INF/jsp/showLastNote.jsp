@@ -5,11 +5,12 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+ <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/styles.css"/>">
 <title>Last note</title>
 </head>
 <body>
 <h2>Last note</h2>
-<table border="1">
+<table>
 <tr>
 <td><b>Note number</b></td>
 <td><b>Note</b></td>
