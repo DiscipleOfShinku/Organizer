@@ -4,8 +4,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.context.request.RequestScope;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.ui.ModelMap;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -36,5 +40,15 @@ public class OrganizerController {
 		@RequestMapping(value = "/noteCreated", method = RequestMethod.GET)
 		public void noteCreated() {
 		   return;
+		}
+
+		@RequestMapping(value = "/showLastNote", method = RequestMethod.GET)
+		public void showLastNote(HttpServletRequest request) {
+			   ApplicationContext context =
+					   new ClassPathXmlApplicationContext("Beans.xml");
+			NoteClass lastNote = (NoteClass)context.getBean("NoteClass");
+			lastNote.getLastNote();
+			request.setAttribute("lastNote", lastNote);
+			return;
 		}
 }

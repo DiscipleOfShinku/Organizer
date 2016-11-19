@@ -9,5 +9,6 @@
 </head>
 <body>
    <h2><c:out value="Your note was stored."/></h2>
+    <a href="/Organizer/showLastNote">View last note.</a>
 </body>
 </html>
