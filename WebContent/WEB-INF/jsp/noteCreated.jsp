@@ -12,5 +12,11 @@
 <body>
    <h2><c:out value="Your note was stored."/></h2>
     <a href="/Organizer/showLastNote">View last note.</a>
+    
+<form name='logoutForm' action="<c:url value='logout' />" method='POST'>
+<input name="logout" type="submit" value="logout" />
+		  <input type="hidden" name="${_csrf.parameterName}"
+			value="${_csrf.token}" />
+</form>
 </body>
 </html>

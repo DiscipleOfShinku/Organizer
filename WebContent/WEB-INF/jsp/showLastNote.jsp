@@ -23,5 +23,11 @@
 </tr>
 </table>
 <a href="/Organizer/main">Create another note.</a>
+
+<form name='logoutForm' action="<c:url value='logout' />" method='POST'>
+<input name="logout" type="submit" value="logout" />
+		  <input type="hidden" name="${_csrf.parameterName}"
+			value="${_csrf.token}" />
+</form>
 </body>
 </html>

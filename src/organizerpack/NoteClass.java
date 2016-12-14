@@ -1,10 +1,6 @@
 package organizerpack;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.Map;
-
 import javax.sql.DataSource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.UncategorizedSQLException;
@@ -53,13 +49,13 @@ public class NoteClass {
 	public void createEntry(){
 		Timestamp timeStamp = new Timestamp(System.currentTimeMillis());
 	    try {
-	    	jdbcTemplateObject.execute("create schema SQLWooh create table SQLWooh.OrganizerNotes (ID int IDENTITY(1,1) PRIMARY KEY, UserID int NOT NULL, Note varchar(1000), NoteDate smalldatetime)");
-		       String SQL = "insert into SQLWooh.OrganizerNotes (UserID, Note, NoteDate) values (1, ?, ?)";
+	    	jdbcTemplateObject.execute("CREATE SCHEMA SQLWooh CREATE TABLE SQLWooh.OrganizerNotes (ID int IDENTITY(1,1) PRIMARY KEY, UserID int NOT NULL, Note varchar(1000), NoteDate smalldatetime NOT NULL)");
+		       String SQL = "INSERT INTO SQLWooh.OrganizerNotes (UserID, Note, NoteDate) VALUES (1, ?, ?)";
 		       jdbcTemplateObject.update( SQL, note, timeStamp);    	
 	    }
 	    catch (UncategorizedSQLException ue) {
 	    	try {
-		       String SQL = "insert into SQLWooh.OrganizerNotes (UserID, Note, NoteDate) values (1, ?, ?)";
+		       String SQL = "INSERT INTO SQLWooh.OrganizerNotes (UserID, Note, NoteDate) VALUES (1, ?, ?)";
 		       jdbcTemplateObject.update( SQL, note, timeStamp);
 	    	}
 			catch (DataAccessException e) {
@@ -74,7 +70,7 @@ public class NoteClass {
 	
 	public NoteClass getLastNote() {
 	    try {
-	    	SqlRowSet res = jdbcTemplateObject.queryForRowSet("select top 1 ID, Note, NoteDate from SQLWooh.OrganizerNotes order by NoteDate desc");
+	    	SqlRowSet res = jdbcTemplateObject.queryForRowSet("SELECT TOP 1 ID, Note, NoteDate FROM SQLWooh.OrganizerNotes ORDER BY NoteDate DESC");
 	    	res.first();
 	    	id = res.getInt("ID");
 	    	note = res.getString("Note");
