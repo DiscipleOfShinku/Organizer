@@ -1,6 +1,11 @@
 package organizerpack;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -12,6 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 @Controller
 public class OrganizerController {
@@ -34,25 +41,38 @@ public class OrganizerController {
 			return model;
 		}
 	
-	   @RequestMapping(value = "/", method = RequestMethod.GET)
-	   public String redirect() {
+	    @RequestMapping(value = "/", method = RequestMethod.GET)
+	    public String redirect() {
 	      return "redirect:main";
-	   }
+	    }
 	   
-	   @RequestMapping(value = "/main", method = RequestMethod.GET)
-	   public ModelAndView main() {
+	    @RequestMapping(value = "/main", method = RequestMethod.GET)
+	    public ModelAndView main() {
 		  return new ModelAndView("main", "command", new NoteClass());
-	   }
+	    }
 		
+	    @Transactional
 		@RequestMapping(value = "/addNote", method = RequestMethod.POST)
 		public String addNote(@ModelAttribute("Organizer")NoteClass noteTyped, 
 		ModelMap model) {
-		   ApplicationContext context =
+		    ApplicationContext context =
 				   new ClassPathXmlApplicationContext("Beans.xml");
-		   NoteClass noteInstance = (NoteClass)context.getBean("noteClass");
-		   noteInstance.setNote(noteTyped.getNote());
-		   noteInstance.createEntry();
-		   return "redirect:noteCreated";
+		    NoteClass noteInstance = (NoteClass)context.getBean("noteClass");
+		    noteInstance.setNote(noteTyped.getNote());
+	    	DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+	    	def.setName("addNoteTransaction");
+	    	def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+	    	PlatformTransactionManager txManager = context.getBean("transactionManager", DataSourceTransactionManager.class);
+	    	TransactionStatus status = txManager.getTransaction(def);
+	    	try {
+	    		noteInstance.createEntry();
+	    	}
+	    	catch (DataAccessException e) {
+	            txManager.rollback(status);
+	            throw e;
+	         }
+	    	txManager.commit(status);
+	    	return "redirect:noteCreated";
 		}
 		
 		@RequestMapping(value = "/noteCreated", method = RequestMethod.GET)
@@ -65,7 +85,19 @@ public class OrganizerController {
 			   ApplicationContext context =
 					   new ClassPathXmlApplicationContext("Beans.xml");
 			NoteClass lastNote = context.getBean("noteClass", NoteClass.class);
-			lastNote.getLastNote();
+	    	DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+	    	def.setName("addNoteTransaction");
+	    	def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+	    	PlatformTransactionManager txManager = context.getBean("transactionManager", DataSourceTransactionManager.class);
+	    	TransactionStatus status = txManager.getTransaction(def);
+	    	try {
+	    		lastNote.getLastNote();
+	    	}
+	    	catch (DataAccessException e) {
+	            txManager.rollback(status);
+	            throw e;
+	         }
+	    	txManager.commit(status);
 			request.setAttribute("lastNote", lastNote);
 			return;
 		}
