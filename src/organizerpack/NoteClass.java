@@ -53,7 +53,7 @@ public class NoteClass {
 		    jdbcTemplateObject.update( SQL, note, timeStamp);    	
 	    }
 		catch (DataAccessException e) {
-			   throw e;
+			throw e;
 		}
 
 	 }
@@ -69,7 +69,7 @@ public class NoteClass {
 	    	return this;
 	    }
 		catch (DataAccessException e) {
-			   throw e;
+			throw e;
 		}
 	}
 }
