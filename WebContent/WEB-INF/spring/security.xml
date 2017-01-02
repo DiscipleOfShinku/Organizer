@@ -1,12 +1,25 @@
-<b:beans xmlns="http://www.springframework.org/schema/security"
+<!-- <b:beans xmlns="http://www.springframework.org/schema/security" -->
+<beans xmlns="http://www.springframework.org/schema/beans"
 		 xmlns:b="http://www.springframework.org/schema/beans"
 		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xmlns:context="http://www.springframework.org/schema/context"
 		 xmlns:security="http://www.springframework.org/schema/security"
 		 xsi:schemaLocation="
 		 	http://www.springframework.org/schema/beans
 		 	http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		 	http://www.springframework.org/schema/context
+    		http://www.springframework.org/schema/context/spring-context-4.3.xsd
 			http://www.springframework.org/schema/security
 			http://www.springframework.org/schema/security/spring-security-4.2.xsd">
+			
+	<bean id="dataSource" 
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
+		<property name="url" value="jdbc:sqlserver://127.0.0.1:1433;databaseName=Organizer"/>
+		<property name="connectionProperties" value="useUnicode=yes;characterEncoding=utf8;"/>
+		<property name="username" value="sa"/>
+		<property name="password" value="qwerty123"/>
+	</bean>
 
 	<security:http auto-config="true" use-expressions="true">
 	    <!-- Interceptor urls -->
@@ -30,10 +43,15 @@
 	
 	<security:authentication-manager>
 	    <security:authentication-provider>
-	        <security:user-service>
-	            <security:user name="username" password="userpassword" authorities="ROLE_USER" />
-	        </security:user-service>
+        	<security:jdbc-user-service 
+	            data-source-ref="dataSource"  
+	            users-by-username-query=
+	            	"EXEC Entries.GetUserCredentials @username = ?"
+	            authorities-by-username-query=
+	                "EXEC Entries.GetUserAuthority @username = ?"
+            />
 	    </security:authentication-provider>
 	</security:authentication-manager>
 
-</b:beans>
+</beans>
+<!-- </b:beans> -->
