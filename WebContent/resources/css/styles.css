@@ -1,14 +1,18 @@
 @CHARSET "UTF-8";
 
 body {
-    background-color: #e4e4e4;
-        font-family: verdana;
-    font-size: 20px;
+    background-color: #edeacb;
+        font-family: antiqua;
+    font-size: 24px;
 }
 
 table, th, td {
     border: 1px solid black;
     text-align: center;
+    font-size: 20px;
+    border-collapse: collapse;
+    background: #f4f2df;
+    padding: 5px;
 }
 
 #login-box {
