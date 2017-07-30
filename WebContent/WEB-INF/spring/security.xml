@@ -11,14 +11,16 @@
     		http://www.springframework.org/schema/context/spring-context-4.3.xsd
 			http://www.springframework.org/schema/security
 			http://www.springframework.org/schema/security/spring-security-4.2.xsd">
+
+	<context:property-placeholder location="resources/properties/jdbc.properties"/>
 			
 	<bean id="dataSource" 
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
-		<property name="url" value="jdbc:sqlserver://127.0.0.1:1433;databaseName=Organizer"/>
+		<property name="driverClassName" value="${jdbc.driverClassName}"/>
+		<property name="url" value="${jdbc.url}"/>
 		<property name="connectionProperties" value="useUnicode=yes;characterEncoding=utf8;"/>
-		<property name="username" value="sa"/>
-		<property name="password" value="qwerty123"/>
+		<property name="username" value="${jdbc.username}"/>
+		<property name="password" value="${jdbc.password}"/>
 	</bean>
 
 	<security:http auto-config="true" use-expressions="true">
